@@ -10,6 +10,17 @@
     --font-mona: 'Mona Sans', system-ui, sans-serif;
     --font-ibm-plex: 'IBM Plex Sans', system-ui, sans-serif;
     --font-manrope: 'Manrope', system-ui, sans-serif;
+    --font-ocean-trace: 'Ocean Trace Personal Use', 'Ocean Trace-Personal use', cursive;
+  }
+
+  /* Custom font face for Ocean Trace - place the font file under public/fonts/ */
+  @font-face {
+    font-family: 'Ocean Trace Personal Use';
+    src: url('/fonts/OceanTrace-PersonalUse.woff2') format('woff2'),
+         url('/fonts/OceanTrace-PersonalUse.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
   }
 
   html {
@@ -22,8 +33,13 @@
   }
 }
 
-/* Custom utility classes for shadcn/ui patterns */
+/* Typography utility for the Ocean Trace display font */
 @layer utilities {
+  .font-ocean {
+    font-family: var(--font-ocean-trace);
+    letter-spacing: 0.02em;
+  }
+
   .animate-in {
     animation-name: animateIn;
     animation-duration: 350ms;

@@ -6,17 +6,17 @@ export default function History() {
   const [items, setItems] = useState([])
   const [active, setActive] = useState(null)
   const [detail, setDetail] = useState(null)
+  const [deleting, setDeleting] = useState(null)
 
-  useEffect(() => {
-    const run = async () => {
-      try {
-        const res = await fetch(`${backend}/api/conversations`)
-        const data = await res.json()
-        setItems(data.items || [])
-      } catch (e) { console.error(e) }
-    }
-    run()
-  }, [])
+  const load = async () => {
+    try {
+      const res = await fetch(`${backend}/api/conversations`)
+      const data = await res.json()
+      setItems(data.items || [])
+    } catch (e) { console.error(e) }
+  }
+
+  useEffect(() => { load() }, [])
 
   const open = async (id) => {
     setActive(id)
@@ -28,17 +28,39 @@ export default function History() {
     } catch (e) { console.error(e) }
   }
 
+  const del = async (id) => {
+    if (!confirm('Delete this conversation?')) return
+    setDeleting(id)
+    try {
+      const res = await fetch(`${backend}/api/conversations/${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed to delete')
+      if (active === id) {
+        setActive(null)
+        setDetail(null)
+      }
+      await load()
+    } catch (e) { console.error(e) }
+    finally { setDeleting(null) }
+  }
+
   return (
     <div className="max-w-5xl mx-auto px-6 py-12">
       <h3 className="text-2xl font-bold mb-4">Previous Debates</h3>
       <div className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-1 space-y-3">
           {items.map((it) => (
-            <button key={it.id} onClick={() => open(it.id)} className={`w-full text-left p-4 rounded-xl border shadow-sm bg-white/70 hover:bg-white ${active===it.id?'ring-2 ring-sky-400':''}`}>
-              <div className="text-sm text-gray-500">{new Date(it.created_at || Date.now()).toLocaleString()}</div>
-              <div className="font-medium text-gray-800 line-clamp-2">{it.situation}</div>
-              <div className="mt-1 flex gap-2 flex-wrap">{(it.tags||[]).map(t => <span key={t} className="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs">{t}</span>)}</div>
-            </button>
+            <div key={it.id} className={`w-full text-left p-4 rounded-xl border shadow-sm bg-white/70 ${active===it.id?'ring-2 ring-sky-400':''}`}>
+              <button onClick={() => open(it.id)} className="block w-full text-left">
+                <div className="text-sm text-gray-500">{new Date(it.created_at || Date.now()).toLocaleString()}</div>
+                <div className="font-medium text-gray-800 line-clamp-2">{it.situation}</div>
+                <div className="mt-1 flex gap-2 flex-wrap">{(it.tags||[]).map(t => <span key={t} className="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs">{t}</span>)}</div>
+              </button>
+              <div className="mt-2 flex justify-end">
+                <button onClick={() => del(it.id)} className="text-xs px-2 py-1 rounded-md bg-rose-100 text-rose-700 hover:bg-rose-200 disabled:opacity-60" disabled={deleting===it.id}>
+                  {deleting===it.id ? 'Deleting…' : 'Delete'}
+                </button>
+              </div>
+            </div>
           ))}
         </div>
         <div className="md:col-span-2">

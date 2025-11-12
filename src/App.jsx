@@ -14,7 +14,7 @@ function App() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-fuchsia-500 via-sky-500 to-amber-400" />
-            <span className="font-semibold tracking-tight text-sm md:text-base text-fuchsia-200">mindsplit</span>
+            <span className="font-ocean font-semibold tracking-tight text-sm md:text-base text-fuchsia-200 select-none">Mindsplit</span>
           </div>
           <nav className="flex items-center gap-1">
             <button onClick={() => setTab('chat')} className={`px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors hover:bg-white/10 ${tab==='chat'?'bg-white/10':''}`}><MessageSquare size={16}/> Chat</button>
@@ -67,7 +67,7 @@ function App() {
       </main>
 
       <footer className="mt-12 py-8 text-center text-white/50 text-sm">
-        Built with balance • mindsplit
+        Built with balance • Mindsplit
       </footer>
     </div>
   )
