@@ -25,7 +25,7 @@ function App() {
 
       <main>
         <Hero />
-        <section className="max-w-6xl mx-auto px-6">
+        <section className="relative z-10 max-w-6xl mx-auto px-6">
           <div className="mt-8 grid md:grid-cols-2 gap-6">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
               <div className="flex items-center gap-3">
